@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Book from './Book';
 
-function BookShelf({ title, books }) {
-  const bookRow = books.map(book => (
+function BookShelf({ title, books, updateBook }) {
+  const bookRow = books.length > 0 && books.map(book => (
     <li key={book.id}>
-      <Book title={book.title} authors={book.authors} thumbnail={book.imageLinks.thumbnail} />
+      <Book
+        updateBook={updateBook}
+        book={book}
+      />
     </li>
   ));
   return (
@@ -23,6 +26,7 @@ function BookShelf({ title, books }) {
 BookShelf.propTypes = {
   books: PropTypes.arrayOf(PropTypes.object),
   title: PropTypes.string.isRequired,
+  updateBook: PropTypes.func.isRequired,
 };
 
 BookShelf.defaultProps = {

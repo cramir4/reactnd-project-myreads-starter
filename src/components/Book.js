@@ -5,17 +5,26 @@ class Book extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    const { updateBook, book } = this.props;
+    updateBook(book, e.target.value);
   }
 
   render() {
-    const { title, authors, thumbnail } = this.props;
+    const { book } = this.props;
+    const {
+      title, authors, imageLinks, shelf,
+    } = book;
     const authorRow = authors && authors.map(author => <div key={author} className="book-authors">{author}</div>);
     return (
       <div className="book">
         <div className="book-top">
-          <div className="book-cover" style={{ backgroundImage: `url(${thumbnail})` }} />
+          <div className="book-cover" style={imageLinks && { backgroundImage: `url(${imageLinks.thumbnail})` }} />
           <div className="book-shelf-changer">
-            <select>
+            <select onChange={this.handleChange} value={shelf || 'none'}>
               <option value="move" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
@@ -32,13 +41,12 @@ class Book extends Component {
 }
 
 Book.propTypes = {
-  title: PropTypes.string.isRequired,
-  authors: PropTypes.arrayOf(PropTypes.string),
-  thumbnail: PropTypes.string,
-};
-Book.defaultProps = {
-  thumbnail: 'https://books.google.com/books/content?id=fcArAQAAMAAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE725qmrtGiJe_eWzh6SHdN-jTwVpNXMNEMz-bPdy-I7oyyG69yj-4adBLypA2pSMTUqmHlVthWXNFRvewG0m26bcqcTDP9WYWv-nJbX-PDVJjdHgIyIUQrsSANZTvEDGHXU3c3Yt',
-  authors: ['unknown'],
+  updateBook: PropTypes.func.isRequired,
+  book: PropTypes.shape({
+    title: PropTypes.string,
+    authors: PropTypes.array,
+    id: PropTypes.string,
+  }).isRequired,
 };
 
 export default Book;

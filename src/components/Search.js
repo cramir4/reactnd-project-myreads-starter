@@ -10,9 +10,10 @@ class Search extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
+
   onChange(e) {
     const { searchFunction } = this.props;
-    this.setState({ query: e.target.value }, searchFunction(e.target.value));
+    this.setState({ query: e.target.value }, searchFunction(e.target.value.trim()));
   }
 
   render() {
