@@ -24,22 +24,24 @@ class BooksApp extends React.Component {
   getAll() {
     BooksAPI.getAll()
       .then((library) => {
-        this.setState(() => ({
-          library,
-        }));
+        this.setState(() => ({ library }));
       });
   }
 
     searchFunction = (query) => {
       query ? (BooksAPI.search(query)
         .then(
-          data => this.setState(() => ({
-            books: data,
-          })),
+          data => (
+            this.setState(prev => (
+              {
+                books: data.map((b) => {
+                  const shelf = prev.library.find(e => e.id === b.id && e.shelf);
+                  return shelf ? { ...b, shelf } : b;
+                }),
+              }))
+          ),
         )) : (
-        this.setState(() => (
-          { books: [] }
-        ))
+        this.setState(() => ({ books: [] }))
       );
     };
 
@@ -61,11 +63,17 @@ class BooksApp extends React.Component {
     };
 
     updateBook = (book, shelf) => {
-      BooksAPI.update(book, shelf).then(
-        shelf !== 'none' ? this.getAll() : this.setState(prev => ({
-          library: prev.library.filter(b => b.id !== book.id),
-        })),
-      );
+      BooksAPI.update(book, shelf).then(() => (
+        shelf !== 'none'
+          ? this.setState(prev => ({
+            books: prev.books.map(b => (
+              b.id === book.id ? { ...b, shelf } : b
+            )),
+          }), this.getAll())
+          : this.setState(prev => ({
+            library: prev.library.filter(b => b.id !== book.id),
+          }))
+      ));
     };
 
     render() {

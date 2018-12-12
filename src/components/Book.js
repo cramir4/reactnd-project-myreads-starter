@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 class Book extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -22,7 +21,7 @@ class Book extends Component {
     return (
       <div className="book">
         <div className="book-top">
-          <div className="book-cover" style={imageLinks && { backgroundImage: `url(${imageLinks.thumbnail})` }} />
+          <div className="book-cover" style={imageLinks ? { backgroundImage: `url(${imageLinks.thumbnail})` } : { backgroundImage: 'https://dummyimage.com/128x193/2e7c31/fff.png&text=Cover+Missing' }} />
           <div className="book-shelf-changer">
             <select onChange={this.handleChange} value={shelf || 'none'}>
               <option value="move" disabled>Move to...</option>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { DebounceInput } from 'react-debounce-input';
 
 class Search extends Component {
   constructor(props) {
@@ -21,7 +22,13 @@ class Search extends Component {
     const { query } = this.state;
     return (
       <div>
-        <input type="text" value={query} placeholder={placeholder} onChange={this.onChange} />
+        <DebounceInput
+          type="text"
+          value={query}
+          placeholder={placeholder}
+          onChange={this.onChange}
+          debounceTimeout="200"
+        />
       </div>
     );
   }
