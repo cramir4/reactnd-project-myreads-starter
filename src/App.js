@@ -32,7 +32,8 @@ class BooksApp extends React.Component {
       query ? (BooksAPI.search(query)
         .then(
           data => (
-            this.setState(prev => (
+            !data.items
+            && this.setState(prev => (
               {
                 books: data.map((b) => {
                   const shelf = prev.library.find(e => e.id === b.id && e.shelf);
